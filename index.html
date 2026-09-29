@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sapphic Weekly ATX · Halloween Stars</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#1b1026; --deep:#140b1d; --bone:#efe3cc; --ink:#2a1c33;
+  --gold:#e3b54f; --lav:#b9a3e3; --muted:#a693b8;
+  --red:#e0565b; --yellow:#e8c24a; --green:#5cc07c;
+  --display:"Cinzel",Georgia,serif; --body:"Spectral",Georgia,serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--deep);color:var(--bone);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%,#fff8 50%,transparent),radial-gradient(1px 1px at 78% 9%,#fff6 50%,transparent),
+    radial-gradient(1.5px 1.5px at 60% 42%,#fff5 50%,transparent),radial-gradient(1px 1px at 30% 70%,#fff6 50%,transparent),
+    radial-gradient(1px 1px at 88% 80%,#fff5 50%,transparent),radial-gradient(1px 1px at 45% 92%,#fff4 50%,transparent),
+    radial-gradient(ellipse at 50% -10%,#3a2150 0%,var(--deep) 60%);
+  background-attachment:fixed}
+main{max-width:460px;margin:0 auto;padding:20px 18px 110px}
+.view{display:none}.view.on{display:block}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* the tarot card */
+.card{position:relative;background:var(--night);border:1px solid var(--gold);border-radius:14px;padding:26px 22px 24px;
+  box-shadow:inset 0 0 0 5px var(--night),inset 0 0 0 6px #e3b54f66}
+.glyph{font-family:var(--display);font-size:72px;line-height:1;color:var(--gold);text-align:center;margin:4px 0 2px}
+.title{font-family:var(--display);font-weight:700;font-size:26px;text-align:center;letter-spacing:.04em;margin:0}
+.sub{text-align:center;color:var(--muted);font-style:italic;margin:2px 0 18px}
+.part{border-top:1px solid #e3b54f40;padding:14px 0 4px}
+.part h3{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.06em;color:var(--lav);margin:0 0 4px}
+.part p{margin:0}
+.draft{display:inline-block;font-size:12px;color:var(--night);background:var(--lav);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
+
+.btn{display:block;width:100%;border:1px solid var(--gold);background:transparent;color:var(--bone);border-radius:999px;padding:12px 18px;font-family:var(--display);font-size:15px;letter-spacing:.05em}
+.btn.solid{background:var(--gold);color:var(--ink);font-weight:700}
+.row{display:flex;gap:10px;margin-top:18px}.row .btn{flex:1}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.link{background:none;border:0;color:var(--gold);font-family:var(--display);font-size:15px;padding:6px 2px;letter-spacing:.04em}
+
+.hunt-open{margin-top:18px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:1px dashed #e3b54f88;color:var(--bone);border-radius:14px;padding:14px 16px;width:100%;text-align:left}
+.hunt-open b{font-family:var(--display);font-weight:500;color:var(--gold)}
+
+/* score */
+.score{text-align:center;margin:6px 0 10px}
+.score .num{font-family:var(--display);font-size:56px;font-weight:700;line-height:1}
+.score .lbl{color:var(--muted);font-style:italic}
+.icebreaker{margin-top:16px;background:var(--bone);color:var(--ink);border-radius:10px;padding:14px 16px}
+.icebreaker h3{font-family:var(--display);font-size:14px;letter-spacing:.06em;margin:0 0 4px;color:#6b4a86}
+.icebreaker p{margin:0;font-size:18px;font-style:italic}
+
+/* modal + sheet */
+.scrim{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+.scrim.on{display:flex}
+.modal{background:var(--night);border:1px solid var(--gold);border-radius:14px;padding:24px 20px;max-width:360px;width:100%;text-align:center}
+.modal h2{font-family:var(--display);font-size:22px;margin:0 0 6px}
+.modal p{margin:0;color:var(--muted)}
+.sheet{position:fixed;inset:0;background:var(--deep);z-index:5;display:none;overflow:auto;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 18px calc(96px + env(safe-area-inset-bottom,0px))}
+.sheet.on{display:block}
+.sheet-in{max-width:460px;margin:0 auto}
+.x{position:absolute;right:0;top:0;width:44px;height:44px;border:1px solid #e3b54f88;border-radius:50%;background:none;color:var(--bone);font-size:22px}
+.sheet h2{font-family:var(--display);font-size:22px;margin:6px 0 2px}
+.sheet .hint{color:var(--muted);font-style:italic;margin:0 0 14px}
+.signs{list-style:none;margin:0;padding:0}
+.signs li{display:grid;grid-template-columns:28px 34px 1fr 30px;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #ffffff10}
+.box{width:22px;height:22px;border:1.5px solid var(--gold);border-radius:4px;display:grid;place-items:center;color:var(--ink);font-size:15px;font-weight:700}
+.box.on{background:var(--gold)}
+.sg{font-family:var(--display);color:var(--gold);font-size:20px;text-align:center}
+.bar{position:relative;width:26px;height:40px;border:1px solid #ffffff30;border-radius:4px;overflow:hidden;background:#ffffff08}
+.bar i{position:absolute;left:0;right:0;bottom:0;transition:height .5s}
+.bar span{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;font-weight:600;color:#fff;text-shadow:0 0 3px #000}
+.sheet-foot{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(transparent,var(--deep) 30%);
+  padding:20px 18px calc(14px + env(safe-area-inset-bottom,0px))}
+.sheet-foot .in{max-width:460px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end}
+.pride{background:none;border:0;color:var(--bone);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;max-width:90px;text-align:center}
+.finish{border:1px solid var(--gold);background:var(--gold);color:var(--ink);border-radius:999px;padding:10px 14px;font-family:var(--display);font-size:13px;font-weight:700;max-width:190px}
+
+.big{font-family:var(--display);font-size:30px;text-align:center;margin:6px 0}
+.center{text-align:center}
+.code{display:inline-block;font-family:var(--display);font-size:24px;letter-spacing:.12em;border:1px dashed var(--gold);border-radius:8px;padding:6px 14px;margin:10px 0;user-select:none}
+.clock{font-family:var(--display);font-size:20px;color:var(--gold)}
+.claimed{color:var(--green);font-family:var(--display);font-size:20px;margin-top:10px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+
+  <section class="view" id="v-start"><div class="card">
+    <div class="glyph">✦</div><h1 class="title">Halloween Stars</h1>
+    <p class="sub">Sapphic Weekly ATX</p>
+    <p class="center">Scan the QR code on your name tag to get tonight's reading.</p>
+  </div></section>
+
+  <section class="view" id="v-unknown"><div class="card">
+    <div class="glyph">☾</div><h1 class="title">The stars are unclear</h1>
+    <p class="center" style="margin-top:12px">This code isn't one of tonight's name tags. Try scanning the tag again.</p>
+  </div></section>
+
+  <section class="view" id="v-wrong"><div class="card">
+    <div class="glyph">☾</div><h1 class="title">Wrong card</h1>
+    <p class="center" style="margin-top:12px">Please scan the card according to your sign.</p>
+  </div></section>
+
+  <section class="view" id="v-horoscope"><div class="card" id="horo"></div>
+    <button class="hunt-open" id="hunt-open"></button>
+  </section>
+
+  <section class="view" id="v-match">
+    <div class="topbar"><button class="link" id="continue">Continue</button></div>
+    <div class="card" id="match"></div>
+  </section>
+
+  <section class="view" id="v-summary"><div class="card" id="summary"></div></section>
+  <section class="view" id="v-prize"><div class="card center" id="prize"></div></section>
+</main>
+
+<!-- Hunt panel -->
+<div class="sheet" id="sheet" role="dialog" aria-label="Sign hunt">
+  <div class="sheet-in" style="position:relative">
+    <button class="x" id="sheet-x" aria-label="Back to your horoscope">×</button>
+    <h2>Your sign hunt</h2>
+    <p class="hint">Scan someone's tag to check off their sign. Bars show your average match.</p>
+    <ul class="signs" id="signs"></ul>
+  </div>
+  <div class="sheet-foot"><div class="in">
+    <button class="pride" id="pride" aria-label="Spread the Good Vibes">
+      <svg width="46" height="32" viewBox="0 0 6 4" aria-hidden="true" style="border-radius:3px">
+        <rect width="6" height="4" fill="#e40303"/><rect y=".667" width="6" height=".667" fill="#ff8c00"/>
+        <rect y="1.333" width="6" height=".667" fill="#ffed00"/><rect y="2" width="6" height=".667" fill="#008026"/>
+        <rect y="2.667" width="6" height=".667" fill="#004dff"/><rect y="3.333" width="6" height=".667" fill="#750787"/>
+      </svg>
+      Spread the Good Vibes
+    </button>
+    <button class="finish" id="finish" hidden></button>
+  </div></div>
+</div>
+
+<!-- Modals -->
+<div class="scrim" id="m-ask"><div class="modal" role="dialog" aria-modal="true">
+  <h2 id="ask-q"></h2><p id="ask-p"></p>
+  <div class="row"><button class="btn" id="ask-no">No</button><button class="btn solid" id="ask-yes">Yes</button></div>
+</div></div>
+
+<div class="scrim" id="m-share"><div class="modal" role="dialog" aria-modal="true">
+  <h2>Spread the Good Vibes</h2>
+  <p>Share your best moments with us and we'll reshare your story! @sapphicweeklyatx</p>
+  <div class="row"><button class="btn" id="share-cancel">Cancel</button><button class="btn solid" id="share-ig">Open Instagram</button></div>
+</div></div>
+
+<script src="tags.js"></script>
+<script src="content.js"></script>
+<script>
+const SIGNS=["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+const GLYPH=[..."♈♉♊♋♌♍♎♏♐♑♒♓"].map(g=>g+"\uFE0E");
+const TRAIT=["bold","steady","curious","tender","radiant","thoughtful","charming","magnetic","adventurous","ambitious","original","dreamy"];
+const KEY="swatx-halloween-2026";
+const STAFF_PIN="1031";           // change before the event
+const IG_HANDLE="sapphicweeklyatx";
+const POOL=23;                    // lines per compat / wary / facts pool
+const C=window.CONTENT, T=window.TAGS;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let state={};
+try{state=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+
+const params=new URLSearchParams(location.search);
+if(params.has("reset")){try{localStorage.removeItem(KEY)}catch(e){} state={}; history.replaceState(null,"",location.pathname)}
+const code=(params.get("c")||"").trim().toLowerCase();
+const tag=c=>T[c]?{code:c,sign:T[c][0],num:T[c][1]}:null;
+const clearUrl=()=>history.replaceState(null,"",location.pathname);
+
+function show(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+id));window.scrollTo(0,0)}
+function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+const pick=(arr,i,fallback)=>arr&&arr.length===POOL?{t:arr[i]}:{t:fallback,draft:true};
+const line=o=>esc(o.t)+(o.draft?'<span class="draft">draft</span>':"");
+const band=s=>s<40?"var(--red)":s<78?"var(--yellow)":"var(--green)";
+
+/* ---------- content selection ---------- */
+function horoscope(t){
+  const s=SIGNS[t.sign],h=(C.horoscopes||{})[s],n=t.num;
+  if(!h) return {
+    vibe:{t:`Your ${TRAIT[t.sign]} energy sets the tone tonight. Say yes to one unexpected conversation.`,draft:true},
+    creature:{t:"Witch 🧙‍♀️ You brew your own luck tonight.",draft:true},
+    warning:{t:"Don't leave before the last song.",draft:true}};
+  return {vibe:{t:h.vibe[(n-1)%h.vibe.length]},creature:{t:h.creature[(n-1)%h.creature.length]},warning:{t:h.warning[(n*3)%h.warning.length]}};
+}
+function score(a,b){
+  let d=Math.abs(a.sign-b.sign);d=Math.min(d,12-d);
+  const base=[72,48,78,28,88,42,60][d];            // same, semi-sextile, sextile, square, trine, quincunx, opposition
+  const v=hash([a.code,b.code].sort().join("|"))%27-13;
+  return Math.max(3,Math.min(99,base+v));
+}
+function pairing(a,b){
+  let lo=a,hi=b;
+  if(b.sign<a.sign||(b.sign===a.sign&&b.num<a.num)){lo=b;hi=a}
+  const i=lo.num,j=hi.num,p=(C.pairings||{})[lo.sign+"-"+hi.sign]||{};
+  const ci=(i+j)%POOL, wi=lo.sign===hi.sign?(i*j)%POOL:(i+2*j)%POOL;   // unique per pair of people
+  const A=SIGNS[lo.sign],B=SIGNS[hi.sign];
+  return {compat:pick(p.compat,ci,`${A} and ${B}: ${TRAIT[lo.sign]} meets ${TRAIT[hi.sign]}. Worth a second drink to find out more.`),
+          wary:pick(p.wary,wi,`Don't let the ${TRAIT[lo.sign]} one and the ${TRAIT[hi.sign]} one both wait for the other to talk first.`)};
+}
+function fact(me,other){
+  const s=SIGNS[other.sign];
+  return pick((C.facts||{})[s],(me.num+2*other.num)%POOL,`${s}s have been known to be secretly ${TRAIT[other.sign]}.`);
+}
+function icebreaker(me,other){
+  const q=C.icebreakers,n=q.length,gm=me.sign*20+me.num,go=other.sign*20+other.num;
+  let i=(gm+2*go)%n; const j=(go+2*gm)%n;
+  if(i===j&&gm>go)i=(i+1)%n;
+  return q[i];
+}
+
+/* ---------- hunt stats ---------- */
+function stats(){
+  const out=SIGNS.map(()=>({count:0,sum:0}));
+  for(const k in state.scans||{}){const s=state.scans[k];out[s.sign].count++;out[s.sign].sum+=s.score}
+  return out.map(o=>({count:o.count,avg:o.count?Math.round(o.sum/o.count):0}));
+}
+const met=()=>stats().filter(s=>s.count).length;
+
+/* ---------- views ---------- */
+function renderHoroscope(){
+  const me=tag(state.me),h=horoscope(me);
+  $("horo").innerHTML=`<div class="glyph">${GLYPH[me.sign]}</div><h1 class="title">${SIGNS[me.sign]}</h1>
+    <p class="sub">Your reading for tonight</p>
+    <div class="part"><h3>Tonight's vibe</h3><p>${line(h.vibe)}</p></div>
+    <div class="part"><h3>The Halloween creature you're channeling</h3><p>${line(h.creature)}</p></div>
+    <div class="part"><h3>Cosmic warning</h3><p>${line(h.warning)}</p></div>`;
+  const m=met();
+  $("hunt-open").innerHTML=`<span>Your sign hunt</span><b>${m===12?(state.finishedAt?"Complete ✓":"All 12 found!"):m+" of 12"}</b>`;
+  show("horoscope");
+}
+function renderSheet(){
+  const st=stats();
+  $("signs").innerHTML=st.map((s,i)=>`<li>
+    <span class="box ${s.count?"on":""}" role="img" aria-label="${s.count?"Found":"Not found yet"}">${s.count?"✓":""}</span>
+    <span class="sg">${GLYPH[i]}</span><span>${SIGNS[i]}</span>
+    <span class="bar" aria-label="${s.count?`${s.count} met, average ${s.avg}%`:"none yet"}">${s.count?`<i style="height:${s.avg}%;background:${band(s.avg)}"></i><span>${s.count}</span>`:""}</span></li>`).join("");
+  const f=$("finish");
+  f.hidden=met()<12;
+  f.textContent=state.finishedAt?"View your prize":"Finish hunt (or keep playing!)";
+}
+function openSheet(){renderSheet();$("sheet").classList.add("on")}
+function closeSheet(){$("sheet").classList.remove("on");renderHoroscope()}
+
+function renderMatch(t){
+  const me=tag(state.me);
+  state.scans=state.scans||{};
+  if(!state.scans[t.code]){state.scans[t.code]={sign:t.sign,score:score(me,t)};save()}
+  const s=state.scans[t.code].score,p=pairing(me,t);
+  $("match").innerHTML=`<div class="glyph" style="font-size:48px">${GLYPH[me.sign]} × ${GLYPH[t.sign]}</div>
+    <h1 class="title">${SIGNS[me.sign]} × ${SIGNS[t.sign]}</h1>
+    <div class="score"><div class="num" style="color:${band(s)}">${s}%</div><div class="lbl">cosmic match</div></div>
+    <div class="part"><h3>Compatibility</h3><p>${line(p.compat)}</p></div>
+    <div class="part"><h3>Be wary of</h3><p>${line(p.wary)}</p></div>
+    <div class="part"><h3>You should know</h3><p>${line(fact(me,t))}</p></div>
+    <div class="icebreaker"><h3>Ask her</h3><p>${esc(icebreaker(me,t))}</p></div>`;
+  show("match");
+}
+function renderSummary(){
+  const st=stats();let g=0,m=0;
+  st.forEach((s,i)=>{
+    if(s.count>st[g].count||(s.count===st[g].count&&s.avg>st[g].avg))g=i;
+    if(s.avg>st[m].avg||(s.avg===st[m].avg&&s.count>st[m].count))m=i;
+  });
+  $("summary").innerHTML=`<div class="glyph">✦</div>
+    <p class="center">You gravitated towards more</p><p class="big">${SIGNS[g]}s tonight</p>
+    <p class="center" style="font-style:italic">${esc(C.finale.gravitated[SIGNS[g]])}</p>
+    <div class="part center" style="margin-top:16px"><h3>Your cosmic soulmate sign</h3>
+      <p class="big" style="color:${band(st[m].avg)}">${SIGNS[m]} · ${st[m].avg}%</p>
+      <p style="font-style:italic">${esc(C.finale.soulmate[SIGNS[m]])}</p></div>
+    <div class="row"><button class="btn" id="sum-back">Go back</button><button class="btn solid" id="sum-go">Continue</button></div>`;
+  $("sum-back").onclick=()=>{renderHoroscope();openSheet()};
+  $("sum-go").onclick=()=>{if(!state.finishedAt){state.finishedAt=Date.now();save()}renderPrize()};
+  show("summary");
+}
+let clockTimer,taps=0,tapTimer;
+function renderPrize(){
+  const fmt=d=>new Date(d).toLocaleTimeString([], {hour:"numeric",minute:"2-digit",second:"2-digit"});
+  $("prize").innerHTML=`<div class="glyph">🏆</div><h1 class="title">Congratulations!</h1>
+    <p style="margin-top:10px">You met all the signs tonight. Come by the Sapphic Weekly ATX desk to claim your prize.</p>
+    <div class="code" id="code">${esc(state.me)}</div>
+    <div class="clock" id="clock"></div>
+    <p class="sub" style="margin:4px 0 0">Hunt finished at ${fmt(state.finishedAt)}</p>
+    ${state.claimedAt?`<div class="claimed">Prize claimed ✓ ${fmt(state.claimedAt)}</div>`:""}
+    <div class="row"><button class="btn" id="prize-back">Back to your reading</button></div>`;
+  clearInterval(clockTimer);const tick=()=>{$("clock").textContent=fmt(Date.now())};tick();clockTimer=setInterval(tick,1000);
+  $("prize-back").onclick=()=>{clearInterval(clockTimer);renderHoroscope()};
+  $("code").onclick=()=>{               // staff: tap the code 5 times quickly
+    taps++;clearTimeout(tapTimer);tapTimer=setTimeout(()=>taps=0,2500);
+    if(taps>=5){taps=0;if(state.claimedAt)return;
+      const pin=prompt("Staff PIN");if(pin===STAFF_PIN){state.claimedAt=Date.now();save();renderPrize()}}
+  };
+  show("prize");
+}
+
+/* ---------- registration ---------- */
+function ask(q,p,yes,no){$("ask-q").textContent=q;$("ask-p").textContent=p||"";
+  $("ask-yes").onclick=()=>{$("m-ask").classList.remove("on");yes()};
+  $("ask-no").onclick=()=>{$("m-ask").classList.remove("on");no()};
+  $("m-ask").classList.add("on");$("ask-yes").focus()}
+function register(t){
+  const S=SIGNS[t.sign];
+  ask(`Are you a ${S}?`,"",()=>ask(`Confirm ${S} Energy`,"This will be you for the rest of the night.",
+      ()=>{state={me:t.code,scans:{}};save();clearUrl();renderHoroscope()},
+      ()=>show("wrong")),
+    ()=>show("wrong"));
+}
+
+/* ---------- wiring ---------- */
+$("hunt-open").onclick=openSheet;
+$("sheet-x").onclick=closeSheet;
+$("continue").onclick=()=>{clearUrl();renderHoroscope()};
+$("finish").onclick=()=>{$("sheet").classList.remove("on");state.finishedAt?renderPrize():renderSummary()};
+$("pride").onclick=()=>$("m-share").classList.add("on");
+$("share-cancel").onclick=()=>$("m-share").classList.remove("on");
+$("share-ig").onclick=()=>{
+  $("m-share").classList.remove("on");
+  const t=Date.now();location.href="instagram://story-camera";
+  setTimeout(()=>{if(!document.hidden&&Date.now()-t<2500)location.href=`https://www.instagram.com/${IG_HANDLE}/`},1200);
+};
+
+(function route(){
+  if(state.me&&!T[state.me])state={};
+  if(!code){state.me?renderHoroscope():show("start");return}
+  const t=tag(code);
+  if(!t){show("unknown");return}
+  if(!state.me){show("start");register(t);return}
+  if(state.me===code){clearUrl();renderHoroscope();return}
+  renderMatch(t);
+})();
+</script>
+</body>
+</html>
